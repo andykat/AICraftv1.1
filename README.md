@@ -5,14 +5,16 @@ Kill the opponents nexus
 
 ##Game Summary
 Game occurs on a 5x8 map, with players' bases on opposite sides.<br />
-Gold is earned every frame, and can be spent to spawn units.<br />
+Gold is given at the start of the game to allow each player to spawn units<br />
 Units are able to move and attack, whoever kills the opponent's nexus wins<br />
 Units can only be controlled by a set of commands given every frame<br />
 
 # The numbers Alan, what do they mean??
 all numbers are still in testing.
+
+# Players start off with 500 gold
+
 ###Nexus
-Generates 5 gold/frame<br />
 200 Health<br />
 May be given attack in the future<br />
 
