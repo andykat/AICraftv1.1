@@ -21,7 +21,7 @@ public class GreedyAndyAI : AI {
 	void AI.initData(Unit[] tD){
 		unitData = tD;
 	}
-	List<Command> AI.spawn(int resources){
+	/*List<Command> AI.spawn(int resources){
 		List<Command> commands = new List<Command> ();
 		int unitType = 2;
 		while (resources > 0) {
@@ -35,16 +35,16 @@ public class GreedyAndyAI : AI {
 			}
 		}
 		return commands;
-	}
+	}*/
 
-	List<Command> AI.loop(List<Unit> tMyUnits, List<Unit> tEnemyUnits)
+	List<Command> AI.loop(List<Unit> tMyUnits, List<Unit> tEnemyUnits, List<Coordinate> foods)
 	{
 		//resources = tResources;
 		myUnits = tMyUnits;
 		enemyUnits = tEnemyUnits;
 		List<Command> commands = new List<Command> ();
 		
-		/*//spawn the counter whenever possible
+		//spawn the counter whenever possible
 		Command spawnc = new Command ();
 		int spawnType = smartSpawn ();
 		if (spawnType == 0) {
@@ -56,7 +56,7 @@ public class GreedyAndyAI : AI {
 		} else {
 			spawnc.addSpawn (spawnType);
 			commands.Add (spawnc);
-		}*/
+		}
 
 
 

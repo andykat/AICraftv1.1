@@ -11,7 +11,7 @@ public class DumbMarinesAI : AI {
 	void AI.initData(Unit[] tD){
 		unitData = tD;
 	}
-	List<Command> AI.spawn(int resources){
+	/*List<Command> AI.spawn(int resources){
 		List<Command> commands = new List<Command> ();
 		while (resources > unitData[3].getCost()) {
 			Command spawnc = new Command();
@@ -20,15 +20,15 @@ public class DumbMarinesAI : AI {
 			resources -= unitData[3].getCost();
 		}
 		return commands;
-	}
-	List<Command> AI.loop(List<Unit> myUnits, List<Unit> enemyUnits)
+	}*/
+	List<Command> AI.loop(List<Unit> myUnits, List<Unit> enemyUnits, List<Coordinate> foods)
 	{
 		List<Command> commands = new List<Command>();
 		
 		//spawn marines whenever possible
-		/*Command spawnc = new Command();
+		Command spawnc = new Command();
 		spawnc.addSpawn (3);
-		commands.Add (spawnc);*/
+		commands.Add (spawnc);
 		
 		float dir = -1.5708f;
 		if(myUnits[0].getY () - enemyUnits[0].getY () < 0)

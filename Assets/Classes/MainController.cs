@@ -2,17 +2,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
 public class MainController : MonoBehaviour {
 	public GameObject[] unitObjectPreFabs;
 	public GameObject[] wins;
 	public GameObject bulletGO;
+
 	//50 fps
 	private float framePeriod = 0.08f;
 	private float timeCurrent = -100000.0f;
 
 	private float PI = (float)Math.PI;
 
-	private int startingResource = 500;
+	private int startingResource = 300;
 	//private int resourceIncrease = 3;
 
 	private float charRadius = 0.5f;
@@ -34,7 +36,12 @@ public class MainController : MonoBehaviour {
 
 	private List<GameObject> bulletGOs = new List<GameObject>();
 	private List<Bullet> bullets = new List<Bullet> ();
+	private List<GameObject> foodGOs = new List<GameObject>();
+	private List<Coordinate> foods = new List<Coordinate> ();
 	private float bulletSpeed = 0.4f;
+	private int lastFood = 0;
+	private int lastFoodTimer = 10;
+	private int foodValue = 20;
 
 	//Loads the AI that you choose
 	private void loadAI()
@@ -81,7 +88,7 @@ public class MainController : MonoBehaviour {
 		ids [1] = 1002;
 
 		//Spawn units
-		spawnUnits ();
+		//spawnUnits ();
 		//start the game
 		timeCurrent = -0.5f;
 	}
@@ -96,15 +103,18 @@ public class MainController : MonoBehaviour {
 			return;
 		}
 
-		timeCurrent -= framePeriod;
+		//addFood
+		addFood();
 
 		//run AI
-		List<Command> p0Commands = players [0].loop (units [0], units [1]);
-		List<Command> p1Commands = players [1].loop (units [1], units [0]);
+		List<Command> p0Commands = players [0].loop (units [0], units [1], foods);
+		List<Command> p1Commands = players [1].loop (units [1], units [0], foods);
 
 		//run commands received from AI.
 		runCommands (p0Commands, p1Commands);
 
+		//check food collisions
+		checkFoodCollisions();
 
 		//check and delete dead units
 		for(int i=0;i<2;i++)
@@ -144,6 +154,47 @@ public class MainController : MonoBehaviour {
 		}
 	}
 
+	private void checkFoodCollisions()
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < units [i].Count; j++)
+			{
+				for (int k = 0; k < foods.Count; k++)
+				{
+					if (dist (units [i] [j].getX (), units [i] [j].getY (), foods [k].getX (), foods [k].getY ()) < charRadius) {
+						
+						resources [i] += foodValue;
+
+						Destroy (foodGOs [k]);
+						foodGOs.RemoveAt (k);
+						foods.RemoveAt (k);
+						k--;
+					}
+				}
+			}
+		}
+	}
+	private void addFood()
+	{
+		lastFood += 1;
+		timeCurrent -= framePeriod;
+		if (lastFood > lastFoodTimer)
+		{
+			lastFood = 0;
+
+			float ty = UnityEngine.Random.Range (0.0f, halfBoardHeight) * 0.9f;
+			float tx = UnityEngine.Random.Range (-halfBoardWidth, halfBoardWidth) * 0.9f;
+			Coordinate newfood1 = new Coordinate (tx, ty);
+			Coordinate newfood2 = new Coordinate (-tx, -ty);
+			foodGOs.Add (Instantiate(unitObjectPreFabs[10]) as GameObject);
+			foodGOs [foodGOs.Count-1].transform.position = new Vector2 (tx, ty);
+			foodGOs.Add (Instantiate(unitObjectPreFabs[10]) as GameObject);
+			foodGOs [foodGOs.Count-1].transform.position = new Vector2 (-tx, -ty);
+			foods.Add (newfood1);
+			foods.Add (newfood2);
+		}
+	}
 	private void endGame(int loser)
 	{
 		timeCurrent = -1000000.0f;
@@ -200,6 +251,11 @@ public class MainController : MonoBehaviour {
 
 		//run non attack commands for player 0
 		for (int i=0; i<tN; i++) {
+			if(lc0[i].getType() == 1)
+			{
+				//spawn
+				spawn(0, lc0[i].getInt(0));
+			}
 			if(lc0[i].getType() == 2)
 			{
 				int si = idFind(0, lc0[i].getSelfID());
@@ -214,6 +270,11 @@ public class MainController : MonoBehaviour {
 
 		//run non attack commands for player 1
 		for (int i=0; i<tN1; i++) {
+			if(lc1[i].getType() == 1)
+			{
+				//spawn
+				spawn(1, lc1[i].getInt(0));
+			}
 			if(lc1[i].getType() == 2)
 			{
 				int si = idFind(1, lc1[i].getSelfID());
@@ -334,17 +395,59 @@ public class MainController : MonoBehaviour {
 		unitGOs [player] [cIndex].transform.position = new Vector2 (newX, newY);
 	}
 	private void spawnUnits(){
-		List<Command> p0Spawns = players [0].spawn (resources [0]);
+		/*List<Command> p0Spawns = players [0].spawn (resources [0]);
 		List<Command> p1Spawns = players [1].spawn (resources [1]);
 		for (int i=0; i<p0Spawns.Count; i++) {
 			spawn(0, p0Spawns[i].getInt(0),i+1);
 		}
 		for (int i=0; i<p1Spawns.Count; i++) {
 			spawn(1, p1Spawns[i].getInt(0),i+1);
-		}
+		}*/
 
 	}
-	private void spawn(int player, int type, int position)
+	private void spawn(int player, int type)
+	{
+		//calculate spawn location
+		float spawnX = UnityEngine.Random.Range(-halfBoardWidth, halfBoardWidth);
+		float spawnY = units [player] [0].getY() + ((float)Math.Sin (units [player] [0].getRotato())) * 0.5f;
+		Unit newUnit;
+		//add unit to list
+		if (type < 2 || type > 5) {
+			//wrong type
+			return;
+		}
+		else
+		{
+			//not enough resources
+			if(resources[player] < unitData[type].getCost())
+			{
+				return;
+			}
+			newUnit = createUnit (type, player, spawnX, spawnY, units [player] [0].getRotato (), ids [player]);
+		}
+
+		int cIndex = units [player].Count;
+		if (cIndex != unitGOs [player].Count) {
+			// wtf different number of objects
+			return;
+		}
+		units [player].Add (newUnit);
+
+		//update resources, increment unit id
+		resources [player] -= unitData [type].getCost ();
+		ids [player] ++;
+
+
+
+		//add unit gameObject
+		unitGOs [player].Add (Instantiate (unitObjectPreFabs [type * 2 - 2 + player]) as GameObject);
+
+		unitGOs [player] [cIndex].transform.position = new Vector2 (units [player] [cIndex].getX (), units [player] [cIndex].getY ());
+
+		unitGOs [player] [cIndex].transform.eulerAngles = new Vector3 (0.0f, 0.0f, units [player] [cIndex].getRotato () * 180.0f / PI);
+
+	}
+	/*private void spawn(int player, int type, int position)
 	{
 		//calculate spawn location
 		float spawnX = -halfBoardWidth + 0.6f * ((float)position);
@@ -385,7 +488,7 @@ public class MainController : MonoBehaviour {
 		
 		unitGOs [player] [cIndex].transform.eulerAngles = new Vector3 (0.0f, 0.0f, units [player] [cIndex].getRotato () * 180.0f / PI);
 
-	}
+	}*/
 
 	//sets up Unit
 	private Unit createUnit(int u, int team, float x, float y, float rotato, int id)
