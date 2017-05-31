@@ -12,7 +12,7 @@ Units can only be controlled by a set of commands given every frame<br />
 # The numbers Alan, what do they mean??
 all numbers are still in testing.
 
-# Players start off with 500 gold
+# Players start off with 300 gold
 
 ###Nexus
 200 Health<br />
@@ -66,3 +66,7 @@ Rotato (direction of movement)<br />
 ##Command 3: Attack [unit attacks another unit. If enemy is out of range, the attack will fail]
 ID (unit that will attack)<br />
 E_ID (unit being attacked)<br />
+
+
+#Food
+Food spawns randomly on the map symmetrically. Any unit that walks over food will collect 20 gold in reward and the food will then disappear.
