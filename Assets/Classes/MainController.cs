@@ -46,9 +46,9 @@ public class MainController : MonoBehaviour {
 	//Loads the AI that you choose
 	private void loadAI()
 	{
-		players [0] = new DumbMarinesAI ();
+		players [0] = new AndrewBoxAI ();
 		players [0].initData (unitData);
-		players [1] = new GreedyAndyAI ();
+		players [1] = new AndrewBoxAI ();
 		players [1].initData (unitData);
 	}
 
@@ -107,8 +107,8 @@ public class MainController : MonoBehaviour {
 		addFood();
 
 		//run AI
-		List<Command> p0Commands = players [0].loop (units [0], units [1], foods);
-		List<Command> p1Commands = players [1].loop (units [1], units [0], foods);
+		List<Command> p0Commands = players [0].loop (units [0], units [1], foods, resources[0]);
+		List<Command> p1Commands = players [1].loop (units [1], units [0], foods, resources[1]);
 
 		//run commands received from AI.
 		runCommands (p0Commands, p1Commands);
@@ -510,7 +510,7 @@ public class MainController : MonoBehaviour {
 		unitData [1] = new Unit (1, 100000, 150, 150, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0.0f, 0, true, false, false, false, 0.0f);
 
 		//zergling
-		unitData [2] = new Unit (2, 40, 40, 40, 0.3f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0, true, true, false, false, 0.0f);
+		unitData [2] = new Unit (2, 40, 40, 40, 0.3f, 0.6f, 9, 0, 0.0f, 0.0f, 0.0f, 0, true, true, false, false, 0.0f);
 
 		// marine
 		unitData [3] = new Unit (3, 80, 97, 97, 0.10f, 1.4f, 5, 0, 0.0f, 0.0f, 0.0f, 0, true, true, true, false, 0.0f);

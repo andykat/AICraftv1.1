@@ -21,7 +21,7 @@ public class DumbMarinesAI : AI {
 		}
 		return commands;
 	}*/
-	List<Command> AI.loop(List<Unit> myUnits, List<Unit> enemyUnits, List<Coordinate> foods)
+	List<Command> AI.loop(List<Unit> myUnits, List<Unit> enemyUnits, List<Coordinate> foods, int resources)
 	{
 		List<Command> commands = new List<Command>();
 		

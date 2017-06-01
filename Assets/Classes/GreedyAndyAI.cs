@@ -37,9 +37,9 @@ public class GreedyAndyAI : AI {
 		return commands;
 	}*/
 
-	List<Command> AI.loop(List<Unit> tMyUnits, List<Unit> tEnemyUnits, List<Coordinate> foods)
+	List<Command> AI.loop(List<Unit> tMyUnits, List<Unit> tEnemyUnits, List<Coordinate> foods, int tResources)
 	{
-		//resources = tResources;
+		resources = tResources;
 		myUnits = tMyUnits;
 		enemyUnits = tEnemyUnits;
 		List<Command> commands = new List<Command> ();
