@@ -24,7 +24,7 @@ May be given attack in the future<br />
 40 Health<br />
 0.3 movement speed<br />
 0.6 attack range<br />
-10 attack damage<br />
+9 attack damage<br />
 only attacks ground<br />
 
 ### Marine
