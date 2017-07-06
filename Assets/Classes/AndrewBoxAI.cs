@@ -44,7 +44,7 @@ public class AndrewBoxAI: AI {
 				}
 			}
 		}
-		Debug.Log ("maxScore:" + maxScore.ToString());
+		//Debug.Log ("maxScore:" + maxScore.ToString());
 
 		if (maxScore > 0.06) {
 			Command tC = new Command();

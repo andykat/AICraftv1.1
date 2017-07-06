@@ -19,9 +19,9 @@ public class MainController : MonoBehaviour {
 
 	private float charRadius = 0.5f;
 
-	//Board Data
-	private float boardHeight = 8.0f;
-	private float boardWidth = 5.0f;
+    //Board Data
+    private float boardHeight = 8.0f;
+    private float boardWidth = 5.0f;
 	private float halfBoardHeight = 4.0f;
 	private float halfBoardWidth = 2.5f;
 
@@ -46,9 +46,9 @@ public class MainController : MonoBehaviour {
 	//Loads the AI that you choose
 	private void loadAI()
 	{
-		players [0] = new AndrewBoxAI ();
-		players [0].initData (unitData);
-		players [1] = new AndrewBoxAI ();
+		players [0] = new DumbMarinesAI(); //Red
+        players [0].initData (unitData);
+		players [1] = new AlanAppleBeesAI(); 
 		players [1].initData (unitData);
 	}
 

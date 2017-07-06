@@ -100,4 +100,8 @@ public class Unit {
 	{
 		return aoeRadius;
 	}
+
+    public Coordinate getCoor() {
+        return new Coordinate(getX(), getY());
+    }
 }
